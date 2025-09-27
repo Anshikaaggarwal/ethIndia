@@ -1,17 +1,4 @@
-
 'use client';
-
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-
-// export default function Home() {
-//   return (
-//     <main className="flex flex-col items-center justify-center min-h-screen">
-//       <h1 className="text-3xl font-bold mb-6">PredApp Prediction Market</h1>
-//       <ConnectButton />
-//     </main>
-//   )
-// }
-
 
 import React, { useState } from 'react';
 import HeroSection from '@/components/sections/HeroSection';
@@ -25,6 +12,14 @@ import { Button } from '@/components/ui/button';
 import { BarChart3 } from 'lucide-react';
 import { leaderboardData } from '@/components/data/mockData';
 import { copyToClipboard } from '@/components/utils/helpers';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 
 export default function PolymarketAnalytics() {
   const [selectedTrader, setSelectedTrader] = useState(null);
@@ -107,39 +102,80 @@ export default function PolymarketAnalytics() {
                   <div className="text-3xl font-bold text-white mb-1">$29<span className="text-lg text-gray-400">/month</span></div>
                   <div className="text-sm text-gray-400">Cancel anytime</div>
                 </div>
-                <Button className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-green-500/25">
-                  Upgrade to Pro
+                <Button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+                  Subscribe
                 </Button>
               </div>
             </CardContent>
           </Card>
         </section>
 
-        {/* Footer */}
-        <footer className="border-t border-gray-800 py-12">
-          <div className="container mx-auto px-4 text-center">
-            <p className="text-gray-400">
-              © 2024 Polymarket Analytics. Built for traders, by traders.
-            </p>
-          </div>
-        </footer>
+        {/* Trader Detail Modal */}
+        <TraderDetailsModal 
+          selectedTrader={selectedTrader}
+          isOpen={selectedTrader && !showCopyModal}
+          onClose={() => setSelectedTrader(null)}
+          onMirrorTrades={handleMirrorTrades}
+        />
+
+        {/* Copy Trading Modal */}
+        <Dialog open={showCopyModal} onOpenChange={(open) => !open && setShowCopyModal(false)}>
+          <DialogContent className="bg-black border-green-700 text-white rounded-xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold">
+                <span className="text-white">Mirror Trades from </span>
+                <span className="text-green-400 font-mono">{selectedTrader?.address}</span>
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-6 mt-6">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-gray-300">Trading Category</label>
+                <Select value={copySettings.category} onValueChange={(value) => setCopySettings({...copySettings, category: value})}>
+                  <SelectTrigger className="bg-gray-900 border-green-700 text-white">
+                    <SelectValue placeholder="Select category to mirror" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-900 border-green-700 text-white">
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {selectedTrader?.categories?.map((cat) => (
+                      <SelectItem key={cat.name} value={cat.name.toLowerCase()}>{cat.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2 text-gray-300">Number of Bets</label>
+                <Input
+                  type="number"
+                  placeholder="e.g., 10"
+                  value={copySettings.numberOfBets}
+                  onChange={(e) => setCopySettings({...copySettings, numberOfBets: e.target.value})}
+                  className="bg-gray-900 border-green-700 text-white placeholder-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2 text-gray-300">Amount Per Bet (USDC)</label>
+                <Input
+                  type="number"
+                  placeholder="e.g., 100"
+                  value={copySettings.amountPerBet}
+                  onChange={(e) => setCopySettings({...copySettings, amountPerBet: e.target.value})}
+                  className="bg-gray-900 border-green-700 text-white placeholder-gray-500"
+                />
+              </div>
+
+              <Button 
+                onClick={handleStartMirroring}
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-3 text-lg transition-all duration-300 transform hover:scale-105"
+              >
+                Start Mirroring Trades
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
-
-      <TraderDetailsModal 
-        selectedTrader={selectedTrader}
-        isOpen={selectedTrader && !showCopyModal}
-        onClose={() => setSelectedTrader(null)}
-        onMirrorTrades={handleMirrorTrades}
-      />
-
-      <CopyTradingModal
-        selectedTrader={selectedTrader}
-        isOpen={showCopyModal}
-        onClose={() => setShowCopyModal(false)}
-        copySettings={copySettings}
-        setCopySettings={setCopySettings}
-        onStartMirroring={handleStartMirroring}
-      />
     </div>
   );
 }
