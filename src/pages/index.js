@@ -133,13 +133,13 @@ export default function PolymarketAnalytics() {
       />
 
       <CopyTradingModal
-        selectedTrader={selectedTrader}
-        isOpen={showCopyModal}
-        onClose={() => setShowCopyModal(false)}
-        copySettings={copySettings}
-        setCopySettings={setCopySettings}
-        onStartMirroring={handleStartMirroring}
-      />
+  selectedTrader={selectedTrader}
+  isOpen={showCopyModal}
+  onClose={() => setShowCopyModal(false)}
+  copySettings={copySettings}
+  setCopySettings={setCopySettings}
+  onStartMirroring={handleStartMirroring}
+/>
     </div>
   );
 }

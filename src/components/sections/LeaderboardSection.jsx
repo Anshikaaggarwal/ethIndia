@@ -40,8 +40,8 @@ export default function LeaderboardSection({
                   <tr key={trader.address} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors duration-200">
                     <td className="p-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
-                          <span className="text-black font-bold text-sm">#{index + 1}</span>
+                        <div className="w-8 h-8 bg-gradient-to-r  rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">#{index + 1}</span>
                         </div>
                       </div>
                     </td>
@@ -49,7 +49,7 @@ export default function LeaderboardSection({
                       <div className="flex items-center gap-3">
                         <button 
                           onClick={() => onSelectTrader(trader)}
-                          className="text-green-400 hover:text-green-300 font-mono text-sm bg-gray-800/50 px-3 py-1 rounded-lg hover:bg-gray-700/50 transition-all duration-200"
+                          className="text-white  font-mono text-sm bg-gray-800/50 px-3 py-1 rounded-lg hover:bg-gray-700/50 transition-all duration-200"
                         >
                           {trader.shortAddress}
                         </button>
@@ -60,8 +60,8 @@ export default function LeaderboardSection({
                           className="h-8 w-8 p-0 hover:bg-gray-800/50"
                         >
                           {copiedAddress === trader.address ? 
-                            <CheckCircle className="w-4 h-4 text-green-400" /> : 
-                            <Copy className="w-4 h-4 text-gray-400 hover:text-green-400" />
+                            <CheckCircle className="w-4 h-4 " /> : 
+                            <Copy className="w-4 h-4 text-black-400 " />
                           }
                         </Button>
                       </div>
