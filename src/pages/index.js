@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/button';
 import { BarChart3 } from 'lucide-react';
 import { leaderboardData } from '@/components/data/mockData';
 import { copyToClipboard } from '@/components/utils/helpers';
-
+import Chatbot from "@/components/Chatbot";
 export default function PolymarketAnalytics() {
   const [selectedTrader, setSelectedTrader] = useState(null);
   const [showCopyModal, setShowCopyModal] = useState(false);
@@ -140,6 +140,7 @@ export default function PolymarketAnalytics() {
   setCopySettings={setCopySettings}
   onStartMirroring={handleStartMirroring}
 />
+  <Chatbot />
     </div>
   );
 }
